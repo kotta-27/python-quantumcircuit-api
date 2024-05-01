@@ -14,3 +14,6 @@ class Command(BaseCommand):
                 password=settings.SUPERUSER_PASSWORD
             )
             print("スーパーユーザー作成")
+
+        else:
+            print("スーパーユーザーはもう存在します")
