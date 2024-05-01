@@ -6,3 +6,5 @@ qiskit-aer==0.14.1
 qiskit-ibm-provider==0.11.0
 gunicorn==22.0.0
 django-environ
+whitenoise 
+python-decouple
