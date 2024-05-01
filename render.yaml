@@ -7,11 +7,11 @@ databases:
 
 services:
   - type: web
-    name: myapp
+    name: react
     env: python
     region: singapore
     buildCommand: "./build.sh"
-    startCommand: "gunicorn myapp.wsgi:application"
+    startCommand: "gunicorn react.wsgi:application"
     plan: free
     branch: main
     healthCheckPath: /
