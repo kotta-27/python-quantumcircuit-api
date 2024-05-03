@@ -16,9 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECRET_KEY = os.getenv('SECREST_KEY') # .env内の環境変数を取得
-SUPERUSER_NAME = env('SUPERUSER_NAME')
-SUPERUSER_EMAIL = env('SUPERUSER_EMAIL')
-SUPERUSER_PASSWORD = env('SUPERUSER_PASSWORD')
+SUPERUSER_NAME = env("SUPERUSER_NAME")
+SUPERUSER_EMAIL = env("SUPERUSER_EMAIL")
+SUPERUSER_PASSWORD = env("SUPERUSER_PASSWORD")
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +30,8 @@ SECRET_KEY = "django-insecure-hnhv4pr*cg+)p81nj1z17^^ov-c5@b)@8xfn)a#0_p9f9^65$j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'quantumcircuit-api.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'quantumcircuit-api.onrender.com',
+                 'python-quantumcircuit-api.onrender.com']
 
 
 # Application definition
