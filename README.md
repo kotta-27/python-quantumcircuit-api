@@ -3,9 +3,79 @@
 <img src="https://img.shields.io/badge/-Django-092E20.svg?logo=django&style=flat">
 <img src="https://img.shields.io/badge/-Qiskit-00ffaa.svg">
 
+[English](#english) | [日本語](#japanese)
+
+---
+
+<a id="english"></a>
+### English
+
+A single-endpoint Django API. It takes gate and control-dot coordinates placed on a frontend grid, builds a 4-qubit quantum circuit with Qiskit, and returns the resulting state probability distribution.
+
+#### Endpoint
+
+`POST /execute_python_code/`
+
+Request body:
+
+```json
+{
+  "img_data": [["H", 230, 150], ["CXA", 350, 260]],
+  "dot_data": [["CXAD", 1]]
+}
+```
+
+- `img_data`: array of `[gate name, x, y]`.
+  Coordinates map to a 6-column (`i=0..5`) × 4-row (`j=0..3`) grid (cell center `x=230+120*i`, `y=150+110*j`, tolerance ±30); `j` is used directly as the target qubit index (0–3).
+  The gate name is matched by substring:
+  - contains `"CC"` and `"X"` → Toffoli gate (`qc.ccx`)
+  - contains `"C"` and one of `"H"`/`"X"`/`"Z"` (not `"CC"`) → controlled gate (`qc.ch`/`qc.cx`/`qc.cz`)
+  - otherwise contains `"X"`/`"H"`/`"Z"`/`"Y"` → single-qubit gate
+- `dot_data`: control-point rows `[key, control qubit index, ...]`.
+  - Single-control gates: control qubit comes from the row where `dot_info[0] == gate name + "D"` (`dot_info[1]`).
+  - Toffoli gate: first control from the row where `dot_info[0] == gate name + "D_1"` (`dot_info[2]`); second control from the row where `dot_info[1] == gate name + "D_2"` (`dot_info[3]`).
+
+Response:
+
+```json
+{
+  "result": {
+    "0000": 0.5,
+    "0001": 0.5
+  }
+}
+```
+
+Returns `Statevector.probabilities_dict()` as-is (basis-state bitstring → probability).
+
+#### Supported gates
+
+Single-qubit: `X`, `H`, `Z`, `Y`. Controlled: `CH`, `CX`, `CZ`. Toffoli: `CCX`.
+
+#### Setup
+
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+#### Deployment
+
+Deploys to Render via `build.sh` / `render.yaml`.
+
+#### License
+
+MIT License ([LICENSE](./LICENSE)) — Copyright (c) 2026 Kota Mizuno
+
+---
+
+<a id="japanese"></a>
+### 日本語
+
 Djangoの単一エンドポイントAPI。フロントエンドで配置されたゲート・制御点の座標情報を受け取り、4量子ビットの量子回路（Qiskit）を構築、状態ベクトルから確率分布を計算して返す。
 
-### エンドポイント
+#### エンドポイント
 
 `POST /execute_python_code/`
 
@@ -41,11 +111,11 @@ Djangoの単一エンドポイントAPI。フロントエンドで配置され�
 
 `Statevector.probabilities_dict()` の結果（基底状態のビット列 → 確率）をそのまま返す。
 
-### 対応ゲート
+#### 対応ゲート
 
 単一量子ビット: `X`, `H`, `Z`, `Y`。制御ゲート: `CH`, `CX`, `CZ`。トフォリゲート: `CCX`。
 
-### セットアップ
+#### セットアップ
 
 ```bash
 pip install -r requirements.txt
@@ -53,10 +123,10 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### デプロイ
+#### デプロイ
 
 `build.sh` / `render.yaml` により Render へのデプロイを想定。
 
-### ライセンス
+#### ライセンス
 
 MIT License ([LICENSE](./LICENSE)) — Copyright (c) 2026 Kota Mizuno
